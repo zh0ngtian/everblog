@@ -25,7 +25,8 @@
     "home": "^1.0.1",
     "js-yaml": "^3.4.6",
     "lodash": "^3.10.1",
-    "open": "0.0.5"
+    "open": "0.0.5",
+    "moment": "2.22.2"
   },
   "author": {
     "name": "nswbmw",

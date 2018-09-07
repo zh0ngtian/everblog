@@ -106,7 +106,16 @@ function buildBlog() {
     newConfig.lastBuild = moment().format('YYYY-MM-DD HH:mm:ss')
     fs.writeFileSync(configPath, yaml.safeDump(newConfig))
   }).catch(e => {
-    error(e.stack || e)
+	if (e.name && e.name == 'EDAMSystemException') {
+		error('EDAMSystemException: error code ' + e.errorCode + '\n' +
+			'Check this link for details: https://dev.evernote.com/doc/reference/Errors.html#Enum_EDAMErrorCode') 
+		if (e.errorCode == 19){ // RATE_LIMIT_REACHED
+			error('Please wait '+ e.rateLimitDuration + ' seconds to retry.')
+		}
+	} 
+	else {
+		error(e.stack || e)
+	}
     return Promise.reject()
   })
 }
