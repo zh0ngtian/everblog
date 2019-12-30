@@ -1,0 +1,72 @@
+{
+  "_from": "git+https://github.com/zhougy0717/everblog.git",
+  "_id": "everblog@0.2.3",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/everblog",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "https://github.com/zhougy0717/everblog.git",
+    "rawSpec": "https://github.com/zhougy0717/everblog.git",
+    "saveSpec": "git+https://github.com/zhougy0717/everblog.git",
+    "fetchSpec": "https://github.com/zhougy0717/everblog.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "git+https://github.com/zhougy0717/everblog.git#9833e171fa3dcf5eaef9c1db9f9f0209dd7d1877",
+  "_spec": "https://github.com/zhougy0717/everblog.git",
+  "_where": "/Users/zhongtian/Documents/HexoBlog",
+  "author": {
+    "name": "nswbmw",
+    "email": "nswbmw1992@gmail.com"
+  },
+  "bin": {
+    "everblog": "bin/everblog"
+  },
+  "bugs": {
+    "url": "https://github.com/everblogjs/everblog/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "bluebird": "^3.0.5",
+    "chalk": "^1.1.1",
+    "co": "^4.6.0",
+    "commander": "^2.9.0",
+    "debug": "^2.2.0",
+    "enml2text": "^0.1.1",
+    "entities": "^1.1.1",
+    "evernote": "^1.25.82",
+    "home": "^1.0.1",
+    "js-yaml": "^3.4.6",
+    "lodash": "^3.10.1",
+    "moment": "2.22.2",
+    "open": "0.0.5"
+  },
+  "deprecated": false,
+  "description": "write blogs in your evernote.",
+  "devDependencies": {
+    "mocha": "^2.3.4"
+  },
+  "engines": {
+    "node": ">= 4"
+  },
+  "homepage": "https://github.com/everblogjs/everblog#readme",
+  "keywords": [
+    "evernote",
+    "blog"
+  ],
+  "license": "MIT",
+  "main": "lib/everblog",
+  "name": "everblog",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/everblogjs/everblog.git"
+  },
+  "scripts": {
+    "test": "_mocha test/*"
+  },
+  "version": "0.2.3"
+}

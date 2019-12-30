@@ -1,0 +1,134 @@
+#!/usr/bin/env node
+
+'use strict';
+ 
+const fs = require('fs')
+const path = require('path')
+
+const co = require('co')
+const home = require('home')()
+const _ = require('lodash')
+const open = require('open')
+const chalk = require('chalk')
+const yaml = require('js-yaml')
+const program = require('commander')
+const moment = require('moment')
+
+const utils = require('../lib/utils')
+const pkg = require('../package.json')
+const Everblog = require('../lib/everblog')
+
+const configPath = path.join(home, '.everblogrc')
+const log = str => {
+  console.log()
+  console.log('  ' + chalk.green(str).split('\n').join('\n  '))
+  console.log()
+};
+const error = str => {
+  console.log()
+  console.log('  ' + chalk.red(str).split('\n').join('\n  '))
+  console.log()
+};
+
+program
+  .version(pkg.version)
+  .usage('[command]')
+
+program
+  .command('config')
+  .description('list config')
+  .action(configBlog)
+
+program
+  .command('build')
+  .description('build blog')
+  .action(buildBlog)
+
+program
+  .command('start')
+  .description('build and start blog')
+  .action(startBlog)
+
+program.parse(process.argv);
+
+if (process.argv.length === 2) {
+  program.outputHelp();
+}
+
+function configBlog() {
+  try {
+    log(fs.readFileSync(configPath))
+  } catch (e) {
+    error('Failed in reading ' + configPath)
+    error('Please have ~/.everblogrc including:\n\n  token: "xxx"\n  noteStoreUrl: "xxx"\n  notebook: "xxx"')
+  }
+}
+
+function buildBlog() {
+  const dir = process.cwd()
+  const configStr = fs.readFileSync(configPath)
+  const config = yaml.safeLoad(configStr)
+
+  if (!config.token || !config.noteStoreUrl || !config.notebook) {
+    error('Configuration is not complete!')
+    log(configStr)
+    return Promise.reject()
+  }
+
+  config.lastBuild = (new Date(config.lastBuild)).getTime()
+  if (!config.lastBuild) {
+    config.lastBuild = 0
+  } 
+
+
+  let buildProcessor
+  try {
+    buildProcessor = require(dir)
+  } catch (e) {
+    error(e.stack || e)
+    return Promise.reject()
+  }
+
+  return co(function* () {
+    const everblog = new Everblog(config)
+    if (everblog._client.noteStoreUrl.indexOf(everblog._client.serviceHost) == -1){
+      throw new Error('If you are yinxiang user, please specify servicHost in your ~/.everblogrc.')
+    }
+    const notes = yield everblog.findNotes()
+    const webApiUrlPrefix = yield everblog.getWebApiUrlPrefix()
+    const data = utils.formatNotes(notes, webApiUrlPrefix)
+    data.noteStore = everblog._noteStore
+    
+    return yield buildProcessor(data)
+  }).then(() => {
+    log('build finished')
+    let newConfig = _.cloneDeep(config)
+    newConfig.lastBuild = moment().format('YYYY-MM-DD HH:mm:ss')
+    fs.writeFileSync(configPath, yaml.safeDump(newConfig))
+  }).catch(e => {
+	if (e.name && e.name == 'EDAMSystemException') {
+		error('EDAMSystemException: error code ' + e.errorCode + '\n' +
+			'Check this link for details: https://dev.evernote.com/doc/reference/Errors.html#Enum_EDAMErrorCode') 
+		if (e.errorCode == 19){ // RATE_LIMIT_REACHED
+			error('Please wait '+ e.rateLimitDuration + ' seconds to retry.')
+		}
+	} 
+	else {
+		error(e.stack || e)
+	}
+    return Promise.reject()
+  })
+}
+
+function startBlog() {
+  buildBlog().then(distPath => {
+    distPath = distPath || path.join(process.cwd(), 'index.html')
+    if (!fs.existsSync(distPath)) {
+      return Promise.reject(distPath + ' not exist!')
+    }
+    open(distPath)
+  }).catch(e => {
+    if (e) error(e.stack || e)
+  })
+}
+
