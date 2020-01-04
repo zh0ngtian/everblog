@@ -1,5 +1,5 @@
 {
-  "_from": "git+https://github.com/zhougy0717/everblog.git",
+  "_from": "git+https://github.com/zh0ngtian/everblog.git",
   "_id": "everblog@0.2.3",
   "_inBundle": false,
   "_integrity": "",
@@ -7,17 +7,17 @@
   "_phantomChildren": {},
   "_requested": {
     "type": "git",
-    "raw": "https://github.com/zhougy0717/everblog.git",
-    "rawSpec": "https://github.com/zhougy0717/everblog.git",
-    "saveSpec": "git+https://github.com/zhougy0717/everblog.git",
-    "fetchSpec": "https://github.com/zhougy0717/everblog.git",
+    "raw": "https://github.com/zh0ngtian/everblog.git",
+    "rawSpec": "https://github.com/zh0ngtian/everblog.git",
+    "saveSpec": "git+https://github.com/zh0ngtian/everblog.git",
+    "fetchSpec": "https://github.com/zh0ngtian/everblog.git",
     "gitCommittish": null
   },
   "_requiredBy": [
     "#USER"
   ],
-  "_resolved": "git+https://github.com/zhougy0717/everblog.git#9833e171fa3dcf5eaef9c1db9f9f0209dd7d1877",
-  "_spec": "https://github.com/zhougy0717/everblog.git",
+  "_resolved": "git+https://github.com/zh0ngtian/everblog.git#9833e171fa3dcf5eaef9c1db9f9f0209dd7d1877",
+  "_spec": "https://github.com/zh0ngtian/everblog.git",
   "_where": "/Users/zhongtian/Documents/HexoBlog",
   "author": {
     "name": "nswbmw",
