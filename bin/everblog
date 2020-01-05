@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 'use strict';
- 
+
 const fs = require('fs')
 const path = require('path')
 
@@ -69,7 +69,7 @@ function buildBlog() {
   const configStr = fs.readFileSync(configPath)
   const config = yaml.safeLoad(configStr)
 
-  if (!config.token || !config.noteStoreUrl || !config.notebook) {
+  if (!config.token || !config.noteStoreUrl) {
     error('Configuration is not complete!')
     log(configStr)
     return Promise.reject()
@@ -78,8 +78,7 @@ function buildBlog() {
   config.lastBuild = (new Date(config.lastBuild)).getTime()
   if (!config.lastBuild) {
     config.lastBuild = 0
-  } 
-
+  }
 
   let buildProcessor
   try {
@@ -98,7 +97,7 @@ function buildBlog() {
     const webApiUrlPrefix = yield everblog.getWebApiUrlPrefix()
     const data = utils.formatNotes(notes, webApiUrlPrefix)
     data.noteStore = everblog._noteStore
-    
+
     return yield buildProcessor(data)
   }).then(() => {
     log('build finished')
@@ -108,11 +107,11 @@ function buildBlog() {
   }).catch(e => {
 	if (e.name && e.name == 'EDAMSystemException') {
 		error('EDAMSystemException: error code ' + e.errorCode + '\n' +
-			'Check this link for details: https://dev.evernote.com/doc/reference/Errors.html#Enum_EDAMErrorCode') 
+			'Check this link for details: https://dev.evernote.com/doc/reference/Errors.html#Enum_EDAMErrorCode')
 		if (e.errorCode == 19){ // RATE_LIMIT_REACHED
 			error('Please wait '+ e.rateLimitDuration + ' seconds to retry.')
 		}
-	} 
+	}
 	else {
 		error(e.stack || e)
 	}
