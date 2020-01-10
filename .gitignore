@@ -6,7 +6,7 @@ lib-cov
 *.out
 *.pid
 *.gz
-.DS_Store
+**/.DS_Store
 
 # vim tmp/swp files
 *.swp
